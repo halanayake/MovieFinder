@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
@@ -32,7 +34,9 @@
         android:layout_weight="3"
         android:autoSizeTextType="uniform"
         android:autoSizeMaxTextSize="20dp"
-        android:text="Add Movies to DB" />
+        android:text="Add Movies to DB"
+        android:onClick="saveMoviesToDb"
+        />
     <Space
         android:layout_width="wrap_content"
         android:layout_height="0dp"
@@ -43,7 +47,8 @@
         android:layout_weight="3"
         android:autoSizeTextType="uniform"
         android:autoSizeMaxTextSize="20dp"
-        android:text="Search for Movies" />
+        android:text="Search for Movies"
+        android:onClick="searchMovies"/>
     <Space
         android:layout_width="wrap_content"
         android:layout_height="0dp"
@@ -54,7 +59,8 @@
         android:layout_weight="3"
         android:autoSizeTextType="uniform"
         android:autoSizeMaxTextSize="20dp"
-        android:text="Search for Actors" />
+        android:text="Search for Actors"
+        android:onClick="searchActors"/>
     <Space
         android:layout_width="wrap_content"
         android:layout_height="0dp"
@@ -65,7 +71,8 @@
         android:layout_weight="3"
         android:autoSizeTextType="uniform"
         android:autoSizeMaxTextSize="20dp"
-        android:text="Search Movies Online" />
+        android:text="Search Movies Online"
+        android:onClick="onlineSearch"/>
     <Space
         android:layout_width="wrap_content"
         android:layout_height="0dp"
