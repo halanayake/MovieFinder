@@ -17,7 +17,7 @@
             android:layout_height="fill_parent"
             android:text=""
             android:autofillHints="Enter value to search"
-            android:hint="Enter value to search"
+            android:hint="@string/enter_value"
             android:inputType="text"
             tools:ignore="LabelFor"
             android:layout_marginEnd="10dp"/>
@@ -25,7 +25,7 @@
             android:onClick="searchMovie"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Search"/>
+            android:text="@string/search"/>
     </LinearLayout>
 
     <ListView

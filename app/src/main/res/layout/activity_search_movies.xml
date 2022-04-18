@@ -17,10 +17,10 @@
             android:id="@+id/movie_search_field"
             android:layout_width="0dp"
             android:layout_height="fill_parent"
-            android:layout_marginRight="10dp"
+            android:layout_marginEnd="10dp"
             android:layout_weight="1"
             android:autofillHints="Enter movie title"
-            android:hint="Enter movie title"
+            android:hint="@string/enter_movie_title"
             android:inputType="text"
             android:text=""
             tools:ignore="LabelFor" />
@@ -29,7 +29,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:onClick="searchMovie"
-            android:text="Retrieve\nMovie" />
+            android:text="@string/retrieve_movie" />
     </LinearLayout>
 
     <ScrollView
@@ -48,7 +48,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Title" />
+                android:text="@string/title" />
 
             <TextView
                 android:id="@+id/movie_title"
@@ -61,7 +61,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                android:text="Year" />
+                android:text="@string/year" />
 
             <TextView
                 android:id="@+id/movie_year"
@@ -74,7 +74,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                android:text="Rated" />
+                android:text="@string/rated" />
 
             <TextView
                 android:id="@+id/movie_rated"
@@ -87,7 +87,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                android:text="Released" />
+                android:text="@string/released" />
 
             <TextView
                 android:id="@+id/movie_released"
@@ -100,7 +100,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                android:text="Runtime" />
+                android:text="@string/runtime" />
 
             <TextView
                 android:id="@+id/movie_runtime"
@@ -113,7 +113,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                android:text="Genre" />
+                android:text="@string/genre" />
 
             <TextView
                 android:id="@+id/movie_genre"
@@ -126,7 +126,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                android:text="Director" />
+                android:text="@string/director" />
 
             <TextView
                 android:id="@+id/movie_director"
@@ -139,7 +139,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                android:text="Writer" />
+                android:text="@string/writer" />
 
             <TextView
                 android:id="@+id/movie_writer"
@@ -152,7 +152,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                android:text="Actors" />
+                android:text="@string/actors" />
 
             <TextView
                 android:id="@+id/movie_actors"
@@ -165,7 +165,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                android:text="Plot" />
+                android:text="@string/plot" />
 
             <TextView
                 android:id="@+id/movie_plot"
@@ -186,5 +186,5 @@
         android:layout_marginHorizontal="10dp"
         android:autoSizeMaxTextSize="20dp"
         android:autoSizeTextType="uniform"
-        android:text="Save movie to database" />
+        android:text="@string/save_movie" />
 </LinearLayout>

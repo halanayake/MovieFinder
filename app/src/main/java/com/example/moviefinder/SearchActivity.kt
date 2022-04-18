@@ -1,6 +1,7 @@
 package com.example.moviefinder
 
 import android.content.Context
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -19,6 +20,7 @@ import kotlinx.coroutines.*
 class SearchActivity : AppCompatActivity() {
 
     private var isOnline = false
+    private var movies: ArrayList<Movie>? = ArrayList()
 
     class MyAdapter(
         private val context: Context,
@@ -41,19 +43,15 @@ class SearchActivity : AppCompatActivity() {
         }
 
         override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
-            return if (convertView == null) {
-                val rowView = inflater.inflate(R.layout.list_item, parent, false)
-                val movie = getItem(position) as Movie
-                rowView.findViewById<TextView>(R.id.list_name).text = movie.title
-                if (movie.actors != null) {
-                    rowView.findViewById<TextView>(R.id.list_actors).text = movie.actors
-                } else {
-                    rowView.findViewById<TextView>(R.id.list_actors).text = movie.year
-                }
-                rowView
+            val rowView = inflater.inflate(R.layout.list_item, parent, false)
+            val movie = getItem(position) as Movie
+            rowView.findViewById<TextView>(R.id.list_name).text = movie.title
+            if (movie.actors != null) {
+                rowView.findViewById<TextView>(R.id.list_actors).text = movie.actors
             } else {
-                convertView
+                rowView.findViewById<TextView>(R.id.list_actors).text = movie.year
             }
+            return rowView
         }
     }
 
@@ -61,6 +59,52 @@ class SearchActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_search)
         isOnline = intent.getBooleanExtra("isOnline", false)
+        val searchInput = findViewById<EditText>(R.id.search_field)
+        if (isOnline) {
+            searchInput.hint = "Enter movie title"
+        } else {
+            searchInput.hint = "Enter actor name"
+        }
+        if (savedInstanceState != null) {
+            val resultSize = savedInstanceState.getInt("result_length")
+            if (resultSize != null && resultSize > 0) {
+                movies = ArrayList()
+                for (i in 0..resultSize) {
+                    val id = savedInstanceState.getString("result_imdbId_$i")
+                    if (id != null) {
+                        movies!!.add(
+                            Movie(
+                                id,
+                                savedInstanceState.getString("result_title_$i"),
+                                savedInstanceState.getString("result_year_$i"),
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                            )
+                        )
+                    }
+                }
+                setDataToList(movies!!)
+            }
+        }
+
+    }
+
+    override fun onSaveInstanceState(state: Bundle) {
+        super.onSaveInstanceState(state)
+        if (movies != null && movies!!.isNotEmpty()) {
+            state.putInt("result_length", movies!!.size)
+            for ((index, value) in movies!!.withIndex()) {
+                state.putString("result_imdbId_$index", value.imdbId)
+                state.putString("result_title_$index", value.title)
+                state.putString("result_year_$index", value.year)
+            }
+        }
     }
 
     override fun onDestroy() {
@@ -90,10 +134,10 @@ class SearchActivity : AppCompatActivity() {
         val movieDao = db.movieDao()
         Util.showSpinner(layoutInflater)
         scope.launch {
-            val movies = ArrayList<Movie>()
-            movies.addAll(movieDao.searchActor(searchText))
+            movies = ArrayList()
+            movies!!.addAll(movieDao.searchActor(searchText))
             withContext(Dispatchers.Main) {
-                setDataToList(movies)
+                setDataToList(movies!!)
             }
         }
     }
@@ -104,19 +148,14 @@ class SearchActivity : AppCompatActivity() {
         scope.launch {
             val apiCalls = ApiCalls()
             try {
-                val movies = apiCalls.searchMovieByName(searchText)
+                movies = apiCalls.searchMovieByName(searchText)
                 withContext(Dispatchers.Main) {
-                    if (movies != null && movies.isNotEmpty()) {
-                        setDataToList(movies)
+                    if (movies != null && movies!!.isNotEmpty()) {
+                        setDataToList(movies!!)
                         Util.hideSpinner()
                     } else {
-                        setDataToList(ArrayList<Movie>())
+                        setDataToList(ArrayList())
                         Util.hideSpinner()
-                        Toast.makeText(
-                            applicationContext,
-                            "No movie found for : $searchText",
-                            Toast.LENGTH_SHORT
-                        ).show()
                     }
                 }
             } catch (e: Exception) {
@@ -128,26 +167,26 @@ class SearchActivity : AppCompatActivity() {
                         "Error when contacting server.",
                         Toast.LENGTH_SHORT
                     ).show()
-                    setDataToList(ArrayList<Movie>())
+                    setDataToList(ArrayList())
                 }
             }
         }
     }
 
-    private suspend fun setDataToList(movies: ArrayList<Movie>) {
+    private fun setDataToList(movies: ArrayList<Movie>) {
         val listView = findViewById<ListView>(R.id.list_view)
         listView.adapter = MyAdapter(applicationContext, movies)
         listView.onItemClickListener =
             AdapterView.OnItemClickListener { parent, view, position, id ->
                 val selectedMovie = parent.getItemAtPosition(position) as Movie
-                Log.e("XXX", selectedMovie.imdbId)
+                val intent = Intent(this, SearchMovies::class.java)
+                intent.putExtra("movie_id", selectedMovie.imdbId)
+                startActivity(intent)
             }
-        withContext(Dispatchers.Main) {
-            if (movies.isEmpty()) {
-                Toast.makeText(applicationContext, "No movies found!", Toast.LENGTH_SHORT).show()
-            }
-            Util.hideSpinner()
+        if (movies.isEmpty()) {
+            Toast.makeText(applicationContext, "No movies found!", Toast.LENGTH_SHORT).show()
         }
+        Util.hideSpinner()
     }
 
 }

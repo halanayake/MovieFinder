@@ -8,10 +8,8 @@ import androidx.room.Query
 @Dao
 interface MovieDao {
 
-    @Query("SELECT * FROM movies")
-    suspend fun getAllMovies(): List<Movie>
-
     // https://www.sqlitetutorial.net/sqlite-string-functions/sqlite-concat/
+    // https://www.w3resource.com/sqlite/sqlite-collating-function-or-sequence.php
     @Query("SELECT * FROM movies WHERE actors LIKE '%' || :term || '%' COLLATE NOCASE")
     suspend fun searchActor(term: String): List<Movie>
 

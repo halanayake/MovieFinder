@@ -29,6 +29,6 @@
         android:layout_weight="1"
         android:gravity="center"
         android:alpha="1"
-        android:text="TAP TO DISMISS"
+        android:text="@string/tap_to_dismiss"
         android:textAlignment="center"/>
 </LinearLayout>

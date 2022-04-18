@@ -10,8 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textSize="20sp"
-        android:textColor="@color/black"
-        android:text="Hello World!"/>
+        android:textColor="@color/black" />
     <TextView
         android:id="@+id/list_actors"
         android:layout_width="match_parent"

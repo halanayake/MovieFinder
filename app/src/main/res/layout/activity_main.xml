@@ -17,13 +17,13 @@
         android:textColor="@color/black"
         android:textStyle="normal|bold"
         android:textSize="30sp"
-        android:text="Movie Finder"/>
+        android:text="@string/movie_finder"/>
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textAlignment="center"
         android:textColor="@color/black"
-        android:text="your companion in finding movie details."/>
+        android:text="@string/tagline"/>
     <Space
         android:layout_width="wrap_content"
         android:layout_height="0dp"
@@ -34,7 +34,7 @@
         android:layout_weight="3"
         android:autoSizeTextType="uniform"
         android:autoSizeMaxTextSize="20dp"
-        android:text="Add Movies to DB"
+        android:text="@string/add_to_db"
         android:onClick="saveMoviesToDb"
         />
     <Space
@@ -47,7 +47,7 @@
         android:layout_weight="3"
         android:autoSizeTextType="uniform"
         android:autoSizeMaxTextSize="20dp"
-        android:text="Search for Movies"
+        android:text="@string/search_for_movies"
         android:onClick="searchMovies"/>
     <Space
         android:layout_width="wrap_content"
@@ -59,7 +59,7 @@
         android:layout_weight="3"
         android:autoSizeTextType="uniform"
         android:autoSizeMaxTextSize="20dp"
-        android:text="Search for Actors"
+        android:text="@string/search_for_actors"
         android:onClick="searchActors"/>
     <Space
         android:layout_width="wrap_content"
@@ -71,7 +71,7 @@
         android:layout_weight="3"
         android:autoSizeTextType="uniform"
         android:autoSizeMaxTextSize="20dp"
-        android:text="Search Movies Online"
+        android:text="@string/search_movies_online"
         android:onClick="onlineSearch"/>
     <Space
         android:layout_width="wrap_content"
@@ -81,6 +81,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textAlignment="center"
-        android:text="Gayath Halanayake | 2019137 | w1761056"/>
+        android:text="@string/about_me"/>
 
 </LinearLayout>

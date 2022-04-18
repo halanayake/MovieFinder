@@ -1,3 +1,27 @@
 <resources>
     <string name="app_name">MovieFinder</string>
+    <string name="movie_finder">Movie Finder</string>
+    <string name="tagline">your companion in finding movie details.</string>
+    <string name="add_to_db">Add Movies to DB</string>
+    <string name="search_for_movies">Search for Movies</string>
+    <string name="search_for_actors">Search for Actors</string>
+    <string name="search_movies_online">Search Movies Online</string>
+    <string name="about_me">Gayath Halanayake | 2019137 | w1761056</string>
+    <string name="enter_value">Enter value to search</string>
+    <string name="search">Search</string>
+    <string name="enter_movie_title">Enter movie title</string>
+    <string name="retrieve_movie">Retrieve\nMovie</string>
+    <string name="title">Title</string>
+    <string name="year">Year</string>
+    <string name="rated">Rated</string>
+    <string name="released">Released</string>
+    <string name="runtime">Runtime</string>
+    <string name="genre">Genre</string>
+    <string name="director">Director</string>
+    <string name="writer">Writer</string>
+    <string name="actors">Actors</string>
+    <string name="plot">Plot</string>
+    <string name="save_movie">Save movie to database</string>
+    <string name="tap_to_dismiss">TAP TO DISMISS</string>
+    <string name="processing">PROCESSING</string>
 </resources>

@@ -74,11 +74,6 @@ class Util {
             }
         }
 
-        fun movieJsonParser(json: String): Movie {
-            val jsonObject = JSONObject(json)
-            return jsonObjToMovie(jsonObject)
-        }
-
         fun movieArrayJsonParser(json: String): Array<Movie> {
             val jsonArray = JSONArray(json)
             val movieArray: MutableList<Movie> = ArrayList()

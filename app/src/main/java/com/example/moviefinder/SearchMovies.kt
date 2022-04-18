@@ -53,6 +53,25 @@ class SearchMovies : AppCompatActivity() {
             layout.visibility = View.VISIBLE
             saveBtn.isEnabled = true
             setViewFields()
+        } else {
+            val movieId = intent.getStringExtra("movie_id")
+            if (movieId != null && movieId.trim() != "") {
+                val apiCalls = ApiCalls()
+                isSpinner = true
+                val scope = CoroutineScope(Dispatchers.IO)
+                scope.launch {
+                    movie = apiCalls.getMovieById(movieId)
+                    withContext(Dispatchers.Main) {
+                        isSpinner = false
+                        val layout = findViewById<LinearLayout>(R.id.movie_detail_layout)
+                        val saveBtn = findViewById<Button>(R.id.save_to_db)
+                        layout.visibility = View.VISIBLE
+                        saveBtn.isEnabled = true
+                        Util.hideSpinner()
+                        setViewFields()
+                    }
+                }
+            }
         }
 
         mainLayout.post {
