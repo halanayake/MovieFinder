@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:padding="20dp"
-    tools:context=".SearchActivity">
+    tools:context=".SearchMovies">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -179,7 +179,7 @@
     <Button
         android:id="@+id/save_to_db"
         android:enabled="false"
-        android:onClick="saveToDb"
+        android:onClick="saveMovieToDatabase"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
