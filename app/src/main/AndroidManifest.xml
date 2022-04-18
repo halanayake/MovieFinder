@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.moviefinder" >
-
+    <uses-permission android:name="android.permission.INTERNET" />
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -11,9 +11,11 @@
         android:theme="@style/Theme.MovieFinder" >
         <activity
             android:name=".SearchActivity"
+            android:windowSoftInputMode="stateUnchanged"
             android:exported="false" />
         <activity
             android:name=".SearchMovies"
+            android:windowSoftInputMode="stateUnchanged"
             android:exported="false" />
         <activity
             android:name=".MainActivity"

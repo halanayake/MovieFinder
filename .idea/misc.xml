@@ -5,8 +5,8 @@
       <map>
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.8516949152542372" />
         <entry key="app/src/main/res/layout/activity_online_search.xml" value="1.5520833333333333" />
-        <entry key="app/src/main/res/layout/activity_search.xml" value="0.3734375" />
-        <entry key="app/src/main/res/layout/activity_search_movies.xml" value="1.5520833333333333" />
+        <entry key="app/src/main/res/layout/activity_search.xml" value="1.071875" />
+        <entry key="app/src/main/res/layout/activity_search_movies.xml" value="0.30462962962962964" />
         <entry key="app/src/main/res/layout/feedback.xml" value="0.6279863481228669" />
         <entry key="app/src/main/res/layout/spinner.xml" value="0.696078431372549" />
       </map>

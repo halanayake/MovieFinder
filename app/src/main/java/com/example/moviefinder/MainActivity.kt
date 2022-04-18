@@ -10,12 +10,8 @@ import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.room.Room
 import com.example.moviefinder.data.AppDatabase
-import com.example.moviefinder.data.Movie
-import com.example.moviefinder.util.Util
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
-import org.json.JSONArray
-import org.json.JSONObject
+import com.example.moviefinder.service.Util
+import kotlinx.coroutines.*
 import java.lang.Exception
 
 class MainActivity : AppCompatActivity() {
@@ -42,7 +38,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    fun showPopups() {
+    private fun showPopups() {
         if (isSpinner) {
             Util.showSpinner(this.layoutInflater)
         }
@@ -53,8 +49,14 @@ class MainActivity : AppCompatActivity() {
 
     override fun onSaveInstanceState(state: Bundle) {
         super.onSaveInstanceState(state)
-        state.putBoolean("isSpinner", isSpinner)
+        state.putBoolean("isSpinner", Util.isSpinnerVisible())
         state.putBoolean("isFeedback", Util.isFeedbackVisible())
+        Util.hideSpinner()
+        Util.hideFeedback()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
         Util.hideSpinner()
         Util.hideFeedback()
     }
@@ -63,49 +65,30 @@ class MainActivity : AppCompatActivity() {
         try {
             val inflater = getSystemService(LAYOUT_INFLATER_SERVICE) as LayoutInflater
             Util.showSpinner(inflater)
-            isSpinner = true
             val db = Room.databaseBuilder(this, AppDatabase::class.java, "movie_database").build()
             val movieDao = db.movieDao()
-
-            runBlocking {
-                launch {
-                    val source = applicationContext.assets.open("movies.json").bufferedReader()
-                        .use { reader ->
-                            reader.readLines()
-                        }
-                    var jsonText = ""
-                    for (src: String in source) {
-                        jsonText += src
+            val scope = CoroutineScope(Dispatchers.IO)
+            scope.launch {
+                val source = applicationContext.assets.open("movies.json").bufferedReader()
+                    .use { reader ->
+                        reader.readLines()
                     }
-                    val jsonArray = JSONArray(jsonText)
-                    val movieArray: MutableList<Movie> = ArrayList()
-                    for (i in 0 until jsonArray.length()) {
-                        val jsonObj = jsonArray[i] as JSONObject
-                        val movie = Movie(
-                            jsonObj.getString("imdbId"),
-                            jsonObj.getString("Title"),
-                            jsonObj.getString("Year"),
-                            jsonObj.getString("Rated"),
-                            jsonObj.getString("Released"),
-                            jsonObj.getString("Runtime"),
-                            jsonObj.getString("Genre"),
-                            jsonObj.getString("Director"),
-                            jsonObj.getString("Writer"),
-                            jsonObj.getString("Actors"),
-                            jsonObj.getString("Plot")
-                        )
-                        movieArray.add(movie)
+                var jsonText = ""
+                for (src: String in source) {
+                    jsonText += src
+                }
+                val movieArray = Util.movieArrayJsonParser(jsonText)
+                movieDao.insertAll(*movieArray)
+                withContext(Dispatchers.Main) {
+                    launch {
+                        Util.hideSpinner()
+                        Util.showFeedback(inflater, feedbackMsg)
                     }
-                    movieDao.insertAll(*(movieArray.toTypedArray()))
-                    Util.hideSpinner()
-                    isSpinner = false
-                    Util.showFeedback(inflater, feedbackMsg)
                 }
             }
         } catch (e: Exception) {
             Util.hideSpinner()
             Util.hideFeedback()
-            isSpinner = false
             Toast.makeText(this, "Application recovered from an error.", Toast.LENGTH_SHORT).show()
             Log.e("MANUAL_LOG", e.stackTraceToString())
         }

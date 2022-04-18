@@ -23,7 +23,7 @@
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Retrieve\nMovie"/>
+            android:text="Search"/>
     </LinearLayout>
     <ScrollView
         android:layout_width="match_parent"
@@ -31,13 +31,4 @@
         android:layout_weight="1"
         android:layout_marginVertical="10dp">
     </ScrollView>
-    <Button
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:autoSizeTextType="uniform"
-        android:autoSizeMaxTextSize="20dp"
-        android:layout_marginHorizontal="10dp"
-        android:text="Save movie to database"
-        />
 </LinearLayout>
