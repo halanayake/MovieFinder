@@ -11,6 +11,7 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal">
         <EditText
+            android:id="@+id/search_field"
             android:layout_width="0dp"
             android:layout_weight="1"
             android:layout_height="fill_parent"
@@ -19,16 +20,19 @@
             android:hint="Enter value to search"
             android:inputType="text"
             tools:ignore="LabelFor"
-            android:layout_marginRight="10dp"/>
+            android:layout_marginEnd="10dp"/>
         <Button
+            android:onClick="searchMovie"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Search"/>
     </LinearLayout>
-    <ScrollView
+
+    <ListView
+        android:id="@+id/list_view"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"
-        android:layout_marginVertical="10dp">
-    </ScrollView>
+        android:layout_marginTop="10dp"
+        android:layout_weight="1">
+    </ListView>
 </LinearLayout>

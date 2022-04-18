@@ -90,6 +90,17 @@ class Util {
             return movieArray.toTypedArray()
         }
 
+        fun shortMovieArrayJsonParser(json: String): Array<Movie> {
+            val jsonArray = JSONArray(json)
+            val movieArray: MutableList<Movie> = ArrayList()
+            for (i in 0 until jsonArray.length()) {
+                val jsonObj = jsonArray[i] as JSONObject
+                val movie = jsonObjToMovieShort(jsonObj)
+                movieArray.add(movie)
+            }
+            return movieArray.toTypedArray()
+        }
+
         fun jsonObjToMovie(jsonObject: JSONObject): Movie {
             return Movie(
                 jsonObject.getString("imdbID"),
@@ -103,6 +114,22 @@ class Util {
                 jsonObject.getString("Writer"),
                 jsonObject.getString("Actors"),
                 jsonObject.getString("Plot")
+            )
+        }
+
+        private fun jsonObjToMovieShort(jsonObject: JSONObject): Movie {
+            return Movie(
+                jsonObject.getString("imdbID"),
+                jsonObject.getString("Title"),
+                jsonObject.getString("Year"),
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null
             )
         }
 

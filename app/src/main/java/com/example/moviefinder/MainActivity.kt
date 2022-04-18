@@ -32,7 +32,7 @@ class MainActivity : AppCompatActivity() {
             mainLayout.post {
                 showPopups()
             }
-        } catch (e:Exception) {
+        } catch (e: Exception) {
             Toast.makeText(this, "Application recovered from an error.", Toast.LENGTH_SHORT).show()
             Log.e("MANUAL_LOG", e.stackTraceToString())
         }

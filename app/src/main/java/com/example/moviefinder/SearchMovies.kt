@@ -98,7 +98,8 @@ class SearchMovies : AppCompatActivity() {
     }
 
     fun searchMovie(view: View) {
-        val inputMethodManager = this.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        val inputMethodManager =
+            this.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         inputMethodManager.hideSoftInputFromWindow(view.windowToken, 0)
 
         val movieName = findViewById<EditText>(R.id.movie_search_field).text.toString()
@@ -122,10 +123,14 @@ class SearchMovies : AppCompatActivity() {
                             saveBtn.isEnabled = false
                             movie = null
                             Util.hideSpinner()
-                            Toast.makeText(applicationContext, "No movie found for : $movieName", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(
+                                applicationContext,
+                                "No movie found for : $movieName",
+                                Toast.LENGTH_SHORT
+                            ).show()
                         }
                     }
-                } catch (e:Exception) {
+                } catch (e: Exception) {
                     Log.e("MANUAL_LOG", e.stackTraceToString())
                     withContext(Dispatchers.Main) {
                         val layout = findViewById<LinearLayout>(R.id.movie_detail_layout)
@@ -187,7 +192,7 @@ class SearchMovies : AppCompatActivity() {
                         }
                     }
                 }
-            } catch (e : Exception) {
+            } catch (e: Exception) {
                 Toast.makeText(this, "Error occurred when saving", Toast.LENGTH_SHORT).show()
                 Log.e("MANUAL_LOG", e.stackTraceToString())
             }

@@ -39,4 +39,34 @@ class ApiCalls {
         }
     }
 
+    suspend fun searchMovieByName(name: String): ArrayList<Movie>? {
+        val stringBuilder = StringBuilder()
+        val apiUrl = BASE_API + "type=movie&s=" + name
+        val url = URL(apiUrl)
+        val urlConnection: HttpURLConnection = url.openConnection() as HttpURLConnection
+        try {
+            if (urlConnection.responseCode == 200) {
+                val reader = BufferedReader(InputStreamReader(urlConnection.inputStream))
+                var responseStr: String? = reader.readLine()
+                while (responseStr != null) {
+                    stringBuilder.append(responseStr + "\n")
+                    responseStr = reader.readLine()
+                }
+                val jsonObject = JSONObject(stringBuilder.toString())
+                return if (jsonObject.getBoolean("Response")) {
+                    val temp = Util.shortMovieArrayJsonParser(jsonObject.getString("Search"))
+                    val array = ArrayList<Movie>()
+                    array.addAll(temp)
+                    array
+                } else {
+                    null
+                }
+            } else {
+                throw Exception("Server responded with status : " + urlConnection.responseCode)
+            }
+        } finally {
+            urlConnection.disconnect()
+        }
+    }
+
 }
