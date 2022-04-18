@@ -22,6 +22,7 @@ class SearchActivity : AppCompatActivity() {
     private var isOnline = false
     private var movies: ArrayList<Movie>? = ArrayList()
 
+    // Adapter class to create list items of listView
     class MyAdapter(
         private val context: Context,
         private val dataSource: ArrayList<Movie>
@@ -42,6 +43,7 @@ class SearchActivity : AppCompatActivity() {
             return position.toLong()
         }
 
+        // Create list items dynamically and add to ListView
         override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
             val rowView = inflater.inflate(R.layout.list_item, parent, false)
             val movie = getItem(position) as Movie
@@ -58,6 +60,7 @@ class SearchActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_search)
+        // Check intent extra to determine the current function
         isOnline = intent.getBooleanExtra("isOnline", false)
         val searchInput = findViewById<EditText>(R.id.search_field)
         if (isOnline) {
@@ -66,6 +69,7 @@ class SearchActivity : AppCompatActivity() {
             searchInput.hint = "Enter actor name"
         }
         if (savedInstanceState != null) {
+            // Reload previous results from state
             val resultSize = savedInstanceState.getInt("result_length")
             if (resultSize != null && resultSize > 0) {
                 movies = ArrayList()
@@ -89,6 +93,7 @@ class SearchActivity : AppCompatActivity() {
                         )
                     }
                 }
+                // Called to create listView
                 setDataToList(movies!!)
             }
         }
@@ -98,6 +103,7 @@ class SearchActivity : AppCompatActivity() {
     override fun onSaveInstanceState(state: Bundle) {
         super.onSaveInstanceState(state)
         if (movies != null && movies!!.isNotEmpty()) {
+            // Save all results to state with size of results
             state.putInt("result_length", movies!!.size)
             for ((index, value) in movies!!.withIndex()) {
                 state.putString("result_imdbId_$index", value.imdbId)
@@ -112,22 +118,27 @@ class SearchActivity : AppCompatActivity() {
         Util.hideSpinner()
     }
 
+    // Called by search button
     fun searchMovie(view: View) {
         val inputMethodManager =
             this.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        // Hide keyboard when search is clicked
         inputMethodManager.hideSoftInputFromWindow(view.windowToken, 0)
         val searchText = findViewById<EditText>(R.id.search_field).text.toString()
         if (searchText != null && searchText.trim() != "") {
+            // Respective method is called according to the current function
             if (isOnline) {
                 searchTitleOnline(searchText)
             } else {
                 searchActors(searchText)
             }
         } else {
+            // A toast is shown if the text field is empty
             Toast.makeText(this, "Please enter a valid search term.", Toast.LENGTH_SHORT).show()
         }
     }
 
+    // Search movies with entered actor in database using coroutines
     private fun searchActors(searchText: String) {
         val scope = CoroutineScope(Dispatchers.IO)
         val db = Room.databaseBuilder(this, AppDatabase::class.java, "movie_database").build()
@@ -138,22 +149,26 @@ class SearchActivity : AppCompatActivity() {
             movies!!.addAll(movieDao.searchActor(searchText))
             withContext(Dispatchers.Main) {
                 setDataToList(movies!!)
+                Util.hideSpinner()
             }
         }
     }
 
+    // Search movies with entered title in webservice using coroutines
     private fun searchTitleOnline(searchText: String) {
         Util.showSpinner(this.layoutInflater)
         val scope = CoroutineScope(Dispatchers.IO)
         scope.launch {
             val apiCalls = ApiCalls()
             try {
+                // Call api and get results
                 movies = apiCalls.searchMovieByName(searchText)
                 withContext(Dispatchers.Main) {
                     if (movies != null && movies!!.isNotEmpty()) {
                         setDataToList(movies!!)
                         Util.hideSpinner()
                     } else {
+                        // ListView is updated with an empty array to clear exisitng data
                         setDataToList(ArrayList())
                         Util.hideSpinner()
                     }
@@ -161,21 +176,25 @@ class SearchActivity : AppCompatActivity() {
             } catch (e: Exception) {
                 Log.e("MANUAL_LOG", e.stackTraceToString())
                 withContext(Dispatchers.Main) {
-                    Util.hideSpinner()
                     Toast.makeText(
                         applicationContext,
                         "Error when contacting server.",
                         Toast.LENGTH_SHORT
                     ).show()
                     setDataToList(ArrayList())
+                    Util.hideSpinner()
                 }
             }
         }
     }
 
+    // Map parameter array to listView
     private fun setDataToList(movies: ArrayList<Movie>) {
         val listView = findViewById<ListView>(R.id.list_view)
+        // Give defined Adapter class with context and array
         listView.adapter = MyAdapter(applicationContext, movies)
+        // Set onclick listener on each list item. When clicked SearchMovies activity is called
+        // and additional information is displayed
         listView.onItemClickListener =
             AdapterView.OnItemClickListener { parent, view, position, id ->
                 val selectedMovie = parent.getItemAtPosition(position) as Movie
@@ -186,7 +205,6 @@ class SearchActivity : AppCompatActivity() {
         if (movies.isEmpty()) {
             Toast.makeText(applicationContext, "No movies found!", Toast.LENGTH_SHORT).show()
         }
-        Util.hideSpinner()
     }
 
 }

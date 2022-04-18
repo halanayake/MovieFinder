@@ -13,11 +13,13 @@ import org.json.JSONArray
 import org.json.JSONObject
 
 class Util {
+    // Create companion object so methods can be called without creating an object
     companion object {
 
         private var spinnerPopupWindow: PopupWindow? = null
         private var feedbackPopupWindow: PopupWindow? = null
 
+        // Create and display a spinner if currently not showing
         fun showSpinner(inflater: LayoutInflater) {
             if (!isSpinnerVisible()) {
                 val popupView: View = inflater.inflate(R.layout.spinner, null)
@@ -28,10 +30,12 @@ class Util {
             }
         }
 
+        // Hide spinner if showing
         fun hideSpinner() {
             spinnerPopupWindow?.dismiss()
         }
 
+        // Check if spinner is visible
         fun isSpinnerVisible(): Boolean {
             return if (spinnerPopupWindow != null) {
                 spinnerPopupWindow!!.isShowing
@@ -40,6 +44,7 @@ class Util {
             }
         }
 
+        // Create and display a feedback with a custom message if currently not showing
         fun showFeedback(inflater: LayoutInflater, message: String) {
             if (!isFeedbackVisible()) {
                 val popupView: View = inflater.inflate(R.layout.feedback, null)
@@ -62,10 +67,12 @@ class Util {
             }
         }
 
+        // Hide feedback if showing
         fun hideFeedback() {
             feedbackPopupWindow?.dismiss()
         }
 
+        // Check if feedback is visible
         fun isFeedbackVisible(): Boolean {
             return if (feedbackPopupWindow != null) {
                 feedbackPopupWindow!!.isShowing
@@ -74,6 +81,7 @@ class Util {
             }
         }
 
+        // Parse a json array of objects and return a movie array
         fun movieArrayJsonParser(json: String): Array<Movie> {
             val jsonArray = JSONArray(json)
             val movieArray: MutableList<Movie> = ArrayList()
@@ -85,6 +93,7 @@ class Util {
             return movieArray.toTypedArray()
         }
 
+        // Parse a json array of objects with limited attributes and return a movie array
         fun shortMovieArrayJsonParser(json: String): Array<Movie> {
             val jsonArray = JSONArray(json)
             val movieArray: MutableList<Movie> = ArrayList()
@@ -96,6 +105,7 @@ class Util {
             return movieArray.toTypedArray()
         }
 
+        // Map a jsonObject to a Movie object
         fun jsonObjToMovie(jsonObject: JSONObject): Movie {
             return Movie(
                 jsonObject.getString("imdbID"),
@@ -112,6 +122,7 @@ class Util {
             )
         }
 
+        // Map a jsonObject to a Movie object with limited attributes
         private fun jsonObjToMovieShort(jsonObject: JSONObject): Movie {
             return Movie(
                 jsonObject.getString("imdbID"),

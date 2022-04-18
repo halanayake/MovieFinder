@@ -8,11 +8,17 @@ import androidx.room.Query
 @Dao
 interface MovieDao {
 
-    // https://www.sqlitetutorial.net/sqlite-string-functions/sqlite-concat/
-    // https://www.w3resource.com/sqlite/sqlite-collating-function-or-sequence.php
+    /**
+     * Select movies where a given string is contained in actor column
+     * with ignore case using COLLATE NOCASE
+     * @References
+     * || - https://www.sqlitetutorial.net/sqlite-string-functions/sqlite-concat/
+     * NOCASE - https://www.w3resource.com/sqlite/sqlite-collating-function-or-sequence.php
+     */
     @Query("SELECT * FROM movies WHERE actors LIKE '%' || :term || '%' COLLATE NOCASE")
     suspend fun searchActor(term: String): List<Movie>
 
+    // Insert one or multiple records. Replace if already exists
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertAll(vararg movie: Movie)
 

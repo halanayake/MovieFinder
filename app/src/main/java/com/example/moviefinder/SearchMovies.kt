@@ -32,48 +32,56 @@ class SearchMovies : AppCompatActivity() {
         val savedFeedback = savedInstanceState?.getBoolean("isFeedback")
         isFeedback = (savedFeedback != null && savedFeedback == true)
         val mainLayout = findViewById<LinearLayout>(R.id.activity_search_movies)
-
-        val imdbId = savedInstanceState?.getString("movie_imdbId")
-        if (imdbId != null && imdbId.trim() != "") {
-            movie = Movie(
-                imdbId,
-                savedInstanceState.getString("movie_title"),
-                savedInstanceState.getString("movie_year"),
-                savedInstanceState.getString("movie_rated"),
-                savedInstanceState.getString("movie_released"),
-                savedInstanceState.getString("movie_runtime"),
-                savedInstanceState.getString("movie_genre"),
-                savedInstanceState.getString("movie_director"),
-                savedInstanceState.getString("movie_writer"),
-                savedInstanceState.getString("movie_actors"),
-                savedInstanceState.getString("movie_plot")
-            )
-            val layout = findViewById<LinearLayout>(R.id.movie_detail_layout)
-            val saveBtn = findViewById<Button>(R.id.save_to_db)
-            layout.visibility = View.VISIBLE
-            saveBtn.isEnabled = true
-            setViewFields()
-        } else {
-            val movieId = intent.getStringExtra("movie_id")
-            if (movieId != null && movieId.trim() != "") {
-                val apiCalls = ApiCalls()
-                isSpinner = true
-                val scope = CoroutineScope(Dispatchers.IO)
-                scope.launch {
-                    movie = apiCalls.getMovieById(movieId)
-                    withContext(Dispatchers.Main) {
-                        isSpinner = false
-                        val layout = findViewById<LinearLayout>(R.id.movie_detail_layout)
-                        val saveBtn = findViewById<Button>(R.id.save_to_db)
-                        layout.visibility = View.VISIBLE
-                        saveBtn.isEnabled = true
-                        Util.hideSpinner()
-                        setViewFields()
+        try {
+            // Previous data is reloaded from state
+            val imdbId = savedInstanceState?.getString("movie_imdbId")
+            if (imdbId != null && imdbId.trim() != "") {
+                movie = Movie(
+                    imdbId,
+                    savedInstanceState.getString("movie_title"),
+                    savedInstanceState.getString("movie_year"),
+                    savedInstanceState.getString("movie_rated"),
+                    savedInstanceState.getString("movie_released"),
+                    savedInstanceState.getString("movie_runtime"),
+                    savedInstanceState.getString("movie_genre"),
+                    savedInstanceState.getString("movie_director"),
+                    savedInstanceState.getString("movie_writer"),
+                    savedInstanceState.getString("movie_actors"),
+                    savedInstanceState.getString("movie_plot")
+                )
+                val layout = findViewById<LinearLayout>(R.id.movie_detail_layout)
+                val saveBtn = findViewById<Button>(R.id.save_to_db)
+                layout.visibility = View.VISIBLE
+                saveBtn.isEnabled = true
+                setViewFields()
+            } else {
+                // if no previous data is available but an movie id on intent is present
+                // an Api call is performed to get information about that movie and displayed
+                // (Occur when activity triggered from a list item in search)
+                val movieId = intent.getStringExtra("movie_id")
+                if (movieId != null && movieId.trim() != "") {
+                    val apiCalls = ApiCalls()
+                    isSpinner = true
+                    val scope = CoroutineScope(Dispatchers.IO)
+                    scope.launch {
+                        movie = apiCalls.getMovieById(movieId)
+                        withContext(Dispatchers.Main) {
+                            isSpinner = false
+                            val layout = findViewById<LinearLayout>(R.id.movie_detail_layout)
+                            val saveBtn = findViewById<Button>(R.id.save_to_db)
+                            layout.visibility = View.VISIBLE
+                            saveBtn.isEnabled = true
+                            Util.hideSpinner()
+                            setViewFields()
+                        }
                     }
                 }
             }
+        } catch (e: Exception) {
+            Toast.makeText(this, "Application recovered from an error.", Toast.LENGTH_SHORT).show()
+            Log.e("MANUAL_LOG", e.stackTraceToString())
         }
-
+        // Wait until ui is available to display popups
         mainLayout.post {
             showPopups()
         }
@@ -96,6 +104,7 @@ class SearchMovies : AppCompatActivity() {
 
     override fun onSaveInstanceState(state: Bundle) {
         super.onSaveInstanceState(state)
+        // Save existing values to state
         state.putBoolean("isSpinner", Util.isSpinnerVisible())
         state.putBoolean("isFeedback", Util.isFeedbackVisible())
         if (movie != null) {
@@ -116,7 +125,9 @@ class SearchMovies : AppCompatActivity() {
         Util.hideFeedback()
     }
 
+    // Get movie by title. Called by retrieve movie button
     fun searchMovie(view: View) {
+        // Hide keyboard when button is clicked
         val inputMethodManager =
             this.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         inputMethodManager.hideSoftInputFromWindow(view.windowToken, 0)
@@ -133,6 +144,7 @@ class SearchMovies : AppCompatActivity() {
                     val saveBtn = findViewById<Button>(R.id.save_to_db)
                     withContext(Dispatchers.Main) {
                         if (movie != null) {
+                            // Button is enabled and details are shown if movie is available
                             layout.visibility = View.VISIBLE
                             saveBtn.isEnabled = true
                             setViewFields()
@@ -171,6 +183,7 @@ class SearchMovies : AppCompatActivity() {
         }
     }
 
+    // Set text fields with existing movie values
     private fun setViewFields() {
         val title = findViewById<TextView>(R.id.movie_title)
         title.text = movie!!.title
@@ -194,6 +207,7 @@ class SearchMovies : AppCompatActivity() {
         plot.text = movie!!.plot
     }
 
+    // Called by save movie to database button.
     fun saveMovieToDatabase(view: View) {
         if (movie != null) {
             try {
